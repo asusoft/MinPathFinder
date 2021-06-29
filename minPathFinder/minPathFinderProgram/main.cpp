@@ -10,22 +10,22 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
        QTextStream out(stdout);
 
-       QString graphFilePath = getPath(argv[1]);
-       QString pointsFilePath = getPath(argv[2]);
-       QString outFilePath = getPath(argv[3]);
+       QString graphFilePath = getFileDirectory(argv[1]);
+       QString pointsFilePath = getFileDirectory(argv[2]);
+       QString outFilePath = getFileDirectory(argv[3]);
 
        try {
-           QStringList fromToPoints = readFile(pointsFilePath)[0].split(QChar(';'));
+           QStringList fromToPoints = getDataFromFile(pointsFilePath)[0].split(QChar(';'));
            if (fromToPoints.length() < 2)
                throw GraphError{ 9 };
 
-           Graph graph = Graph(readFile(graphFilePath));
+           Graph graph = Graph(getDataFromFile(graphFilePath));
 
            int minDistance = graph.getDistanceTo(fromToPoints[0], fromToPoints[1]);
            QStringList minPath = minDistance == -1 ? QStringList() : graph.getMinPathTo(fromToPoints[0], fromToPoints[1]);
 
            if (minDistance == -1)
-               writeToFile(outFilePath, QStringList(QString::fromUtf8(u8"Путь между указанными точками отсутствует")));
+               writeToOutputFile(outFilePath, QStringList(QString::fromUtf8(u8"There is no path from source to destination point")));
            else {
                QStringList outLines;
                QString pathLine;
@@ -37,17 +37,17 @@ int main(int argc, char *argv[])
                outLines.append(pathLine);
                outLines.append(QString::number(minDistance));
 
-               writeToFile(outFilePath, outLines);
+               writeToOutputFile(outFilePath, outLines);
            }
        }
        catch (GraphError err) {
            try {
                QStringList outLines;
                outLines.append(getErrorMessage(err));
-               writeToFile(outFilePath, outLines);
+               writeToOutputFile(outFilePath, outLines);
            }
            catch (GraphError err) {
-               out << "\n" << getErrorMessage(err);
+               out << getErrorMessage(err);
            }
        }
 

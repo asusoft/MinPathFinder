@@ -6,12 +6,7 @@
 
 QRegExp rx("*.txt");
 
-/// <summary>
-/// Считывает файл по строкам
-/// </summary>
-/// <param name="absolutePath">Абсолютный путь до файла</param>
-/// <returns>Считанные строки файла</returns>
-QStringList readFile(QString absolutePath) {
+QStringList getDataFromFile(QString absolutePath) {
     rx.setPatternSyntax(QRegExp::Wildcard);
 
     QStringList result;
@@ -39,12 +34,7 @@ QStringList readFile(QString absolutePath) {
     return result;
 }
 
-/// <summary>
-/// Записывает в файл строки (с перезаписью)
-/// </summary>
-/// <param name="absolutePath">Абсолютный путь до файла</param>
-/// <param name="lines">Строки для записи в файл</param>
-void writeToFile(QString absolutePath, QStringList lines) {
+void writeToOutputFile(QString absolutePath, QStringList lines) {
     QFile outputFile(absolutePath);
 
     if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -62,13 +52,8 @@ void writeToFile(QString absolutePath, QStringList lines) {
         throw GraphError{ 8 };
 }
 
-/// <summary>
-/// Преобразует относительный путь в абсолютный
-/// </summary>
-/// <param name="path">Относительный путь, в начале должна стоять точка</param>
-/// <returns>Абсолютный путь</returns>
-QString getPath(char* path) {
-    QString result(path);
+QString getFileDirectory(char* dir) {
+    QString result(dir);
 
     if (result.startsWith(QChar('.')))
         result = QDir::currentPath() + result.mid(1);
@@ -80,29 +65,26 @@ QString getErrorMessage(GraphError err) {
     switch (err.errorCode)
     {
         case 0:
-            return QString::fromUtf8(u8"Кол-во точек должно быть столько же, сколько строк в матрице смежности. Кол-во точек: ‘%1’. Кол-во строк ‘%2’.")
-                .arg(QString::number(err.data[0]), QString::number(err.data[1]));
+            return QString::fromUtf8(u8"The number of points should be the same as the number of rows in the adjacency matrix.");
         case 1:
-            return QString::fromUtf8(u8"Точек в схеме должно быть минимум 2-е или более.");
+            return QString::fromUtf8(u8"Points should be more than one.");
         case 2:
-            return QString::fromUtf8(u8"Кол-во точек должно быть столько же, сколько элементов в каждой строке матрицы смежности. Кол-во точек: '%1'. Кол-во элементов: ‘%2’ в строке ‘%3’.")
-                .arg(QString::number(err.data[0]), QString::number(err.data[1]), QString::number(err.data[2]));
+            return QString::fromUtf8(u8"The number of points should be the same as the number of elements in each row of the adjacency matrix.");
         case 3:
-            return QString::fromUtf8(u8"Элемент матрицы в строке ‘%1’ под номером ‘%2’ имеет вид ‘%3’. Допустимые значения элементов – только положительные числа.")
-                .arg(QString::number(err.data[0]), QString::number(err.data[1]), QString::number(err.data[2]));
+            return QString::fromUtf8(u8"Error! Elements must be in positive format");
         case 4:
-            return QString::fromUtf8(u8"На главной диагонали матрицы расстояний может быть значение только “0”. Точки не могут быть соединены сами с собой.");
+            return QString::fromUtf8(u8"The points cannot be connected to themselves.");
         case 5:
-            return QString::fromUtf8(u8"Конечная или начальная точка не была найдена в списке всех точек.");
+            return QString::fromUtf8(u8"The end or start point was not found in the list of all points.");
         case 6:
-            return QString::fromUtf8(u8"Неверно указано расширение файла. Файл должен иметь расширение .txt");
+            return QString::fromUtf8(u8"The file extension is specified incorrectly. The file must have the .txt extension");
         case 7:
-            return QString::fromUtf8(u8"Неверно указан файл с входными данными. Возможно, файл не существует");
+            return QString::fromUtf8(u8"The input file cannot be accessed. The file may not exist");
         case 8:
-            return QString::fromUtf8(u8"Неверно указан файл для выходных данных. Возможно, указанного расположения не существует.");
+            return QString::fromUtf8(u8"The output file cannot be created.");
         case 9:
-            return QString::fromUtf8(u8"Конечная или начальная точка отсутствует во входном файле точек.");
+            return QString::fromUtf8(u8"The source and destination points missing or it is entered incorrectly.");
         default:
-            return QString::fromUtf8(u8"Неизвестная ошибка.");
+            return QString::fromUtf8(u8"Unknown error occured");
     }
 }

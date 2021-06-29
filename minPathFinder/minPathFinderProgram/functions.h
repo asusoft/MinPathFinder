@@ -1,9 +1,27 @@
 #include "graph.h"
 
-QStringList readFile(QString absolutePath);
+/*! Gets all data in a file
+\param[in] file file to be read
+\throw error while reading file
+\return lines lines of the file
+*/
+QStringList getDataFromFile(QString absolutePath);
 
-void writeToFile(QString absolutePath, QStringList lines);
+/*! Writes output data
+  \param[in] filePath file to write in
+  \param[in] lines lines of output data
+*/
+void writeToOutputFile(QString filePath, QStringList lines);
 
-QString getPath(char* path);
+/// <summary>
+/// Gets the absolute path to a file
+/// <param name="path">absolute path to the file</param>
+/// </summary>
+QString getFileDirectory(char* path);
 
+/// <summary>
+/// Gets the error that happen while execution
+/// <param name="err">error number</param>
+/// <returns> error message</returns>
+/// </summary>
 QString getErrorMessage(GraphError err);

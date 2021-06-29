@@ -11,23 +11,23 @@ class Graph
 public:
 
     /// <summary>
-    /// Инициализирует граф
-    /// </summary>
-    /// <param name="lines">На первой строке список точек из файла, на других матрица расстояний</param>
+    /// Initializes the graphic
+    ///< / summary>
+    /// <param name= "lines" >On the first line there is a list of points from the file, on the others there is a distance matrix</param>
     Graph(QStringList lines);
 
     /// <summary>
-    /// Возвращает дистанцию от точки до точки в графе
+    /// Returns the distance from a point to a point in the graph
     /// </summary>
-    /// <param name="pointName">Название точки</param>
-    /// <returns>Расстояние от указанной точки до расчётной. Если точки не соедененны, возвращает -1</returns>
+    /// <param name="pointName">Point name< / param>
+    /// <returns>The distance from the specified point to the calculated one. If the points are not connected, returns -1</returns>
     int getDistanceTo(QString fromPointName, QString toPointName);
 
     /// <summary>
-    /// Возвращает полный кратчайший путь от точки до точки в графе
-    /// </summary>
+    /// Returns the complete shortest path from point to point in the graph
+    ///</summary>
     /// <param name="pointName"></param>
-    /// <returns>Список имён точек, которые представляют кратчайший путь. Если точки не соедененны, возвращает пустой список</returns>
+    /// <returns>A list of point names that represent the shortest path. If the points are not connected, returns an empty list</returns>
     QStringList getMinPathTo(QString fromPointName, QString toPointName);
 
     QStringList getPointNames();
@@ -35,54 +35,54 @@ public:
 
 private:
     /// <summary>
-    /// Последовательный список имён всех точек графа
+    /// A sequential list of the names of all points in the graph
     /// </summary>
     QStringList pointNames;
 
     /// <summary>
-    /// Взвешенная матрица смежности
+    /// Weighted adjacency matrix
     /// </summary>
     QList<QList<int>> distancesMatrix;
 
     /// <summary>
-    /// Индекс точки, откуда производился расчёт по алгоритму Дейкстры
+    /// The index of the point from which the calculation was made using Dijkstra's algorithm
     /// </summary>
     int originPointIndex;
 
     /// <summary>
-    /// Имя точки, откуда производился расчёт по алгоритму Дейкстры
+    /// The name of the point from where the calculation was performed using Dijkstra's algorithm
     /// </summary>
     QString originPointName;
 
     /// <summary>
-    /// Список меток, рассчитанных алгоритмом Дейкстры для конкретной точки
+    /// List of placemarks calculated by Dijkstra's algorithm for a specific point
     /// </summary>
     QList<int> pointLabels;
 
     /// <summary>
-    /// Расчитывает расстояние до всех точек графа из определенной точки
+    /// Calculates the distance to all points of the graph from a certain point
     /// </summary>
-    /// <param name="pointName">Точка, до куда расчитывать расстояние</param>
+    /// <param name="point Name">The point to calculate the distance to </param>
     void calculateLabelsFromPoint(QString pointName);
 
     /// <summary>
-    /// Возвращает числовой индекс точки по её имени
+    /// Returns the numeric index of a point by its name
     /// </summary>
-    /// <param name="pointName">Имя точки</param>
-    /// <returns>Индекс точки. -1 если такой точки не существует в графе</returns>
+    ///<param name="point Name">Point name</param>
+    /// <returns>The index of the point. -1 if such a point does not exist in the graph</returns>
     int getPointIndex(QString pointName);
 
     /// <summary>
-    /// Находит индекс минимального значения в списке
+    /// Finds the index of the minimum value in the list
     /// </summary>
-    /// <param name="list">Список значений</param>
-    /// <returns>Индекс минимального значения</returns>
+    /// <param name= "list" >List of values</param>
+    /// <returns>Index of the minimum value</returns>
     int getIndexOfMin(QList<int> list);
 
     /// <summary>
-    /// Возвращает дистанцию до всех точек из указанной
-    /// </summary>
-    /// <param name="toPoint">Индекс точки, из которой ищем дистанцию</param>
-    /// <returns>Список дистанций до всех точек</returns>
+    /// Returns the distance to all points from the specified
+    /// < / summary>
+    /// <param name="to Point">Index of the point from which we are looking for the distance</param>
+    /// <returns>List of distances to all points</returns>
     QList<int> getConnectedPoints(int toPoint);
 };
